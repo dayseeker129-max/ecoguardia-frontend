@@ -4,7 +4,7 @@ import axios from "axios";
 
 // Esto crea un acceso directo a tu servidor
 const api = axios.create({
-  baseURL: "https://ecoguardia-backend.onrender.com/api"
+  baseURL: "http://localhost:5000/api"
 });
 
 // ESTO ES LO QUE AGREGASTE (El interceptor)
@@ -327,28 +327,21 @@ function App() {
             <div className="dashboard-wrapper" style={{maxWidth: '1150px', margin: '0 auto', background: '#fff', borderRadius: '25px', display: 'flex', minHeight: '550px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'}}>
               
               {/* BARRA LATERAL */}
-              // BUSCA ESTA LÍNEA Y REEMPLÁZALA:
-<div className="dashboard-wrapper" style={{
-  maxWidth: '1150px', 
-  margin: '0 auto', 
-  background: '#fff', 
-  borderRadius: '25px', 
-  display: 'flex', 
-  flexDirection: window.innerWidth < 768 ? 'column' : 'row', // <--- CAMBIO CLAVE
-  minHeight: 'auto', // <--- CAMBIO CLAVE
-  boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)',
-  overflow: 'hidden'
-}}>
-
-  {/* BARRA LATERAL: Cambia width fixed por 100% en móvil */}
-  <div className="dash-sidebar" style={{
-    width: window.innerWidth < 768 ? '100%' : '280px', // <--- CAMBIO CLAVE
-    background: '#0f172a', 
-    padding: '20px', 
-    color: '#f8fafc'
-  }}>
+              <div className="dash-sidebar" style={{width: '280px', background: '#0f172a', padding: '40px 20px', color: '#f8fafc', borderTopLeftRadius: '25px', borderBottomLeftRadius: '25px'}}>
+                <div style={{marginBottom: '35px', paddingLeft: '10px'}}>
+                  <span style={{color: '#10b981', fontSize: '0.75rem', fontWeight: 'bold', letterSpacing: '2px'}}>ECO-ACADEMIA</span>
+                </div>
+                {Object.keys(tabData).map(tab => (
+                    <div key={tab} className={`sidebar-item ${activeTab === tab ? "active" : ""}`}
+                         onClick={() => setActiveTab(tab)}
+                         style={{
+                           padding: '16px 20px', borderRadius: '14px', cursor: 'pointer', marginBottom: '12px', fontSize: '0.95rem', transition: 'all 0.3s ease',
+                           background: activeTab === tab ? 'linear-gradient(135deg, #10b981, #059669)' : 'transparent',
+                           boxShadow: activeTab === tab ? '0 10px 15px -3px rgba(16, 185, 129, 0.4)' : 'none'
+                         }}>
+                      {tab}
                     </div>
-                
+                ))}
               </div>
 
               {/* CONTENIDO PRINCIPAL DINÁMICO */}

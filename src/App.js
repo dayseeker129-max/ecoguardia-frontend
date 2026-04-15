@@ -204,9 +204,19 @@ function App() {
         </div>
       </header>
 
-      <section id="nuestra-mision" style={{padding: '80px 20px', background: '#fff'}}>
-        <div style={{maxWidth: '1100px', margin: '0 auto'}}>
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '50px', alignItems: 'center'}}>
+      // CAMBIA LOS VALORES POR ESTOS:
+<section id="nuestra-mision" style={{
+  padding: window.innerWidth < 768 ? '40px 15px' : '80px 20px', 
+  background: '#fff'
+}}>
+  <div style={{maxWidth: '1100px', margin: '0 auto'}}>
+    {/* El grid auto-fit que ya tienes está bien, pero asegúrate del gap */}
+    <div style={{
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+      gap: window.innerWidth < 768 ? '20px' : '50px', 
+      alignItems: 'center'
+    }}>
             <div>
               <span style={{color: '#10b981', fontWeight: 'bold', letterSpacing: '1px'}}>NUESTRA HISTORIA</span>
               <h2 style={{fontSize: '2.5rem', color: '#1e293b', margin: '15px 0'}}>¿Por qué empezamos?</h2>
@@ -327,21 +337,28 @@ function App() {
             <div className="dashboard-wrapper" style={{maxWidth: '1150px', margin: '0 auto', background: '#fff', borderRadius: '25px', display: 'flex', minHeight: '550px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'}}>
               
               {/* BARRA LATERAL */}
-              <div className="dash-sidebar" style={{width: '280px', background: '#0f172a', padding: '40px 20px', color: '#f8fafc', borderTopLeftRadius: '25px', borderBottomLeftRadius: '25px'}}>
-                <div style={{marginBottom: '35px', paddingLeft: '10px'}}>
-                  <span style={{color: '#10b981', fontSize: '0.75rem', fontWeight: 'bold', letterSpacing: '2px'}}>ECO-ACADEMIA</span>
-                </div>
-                {Object.keys(tabData).map(tab => (
-                    <div key={tab} className={`sidebar-item ${activeTab === tab ? "active" : ""}`}
-                         onClick={() => setActiveTab(tab)}
-                         style={{
-                           padding: '16px 20px', borderRadius: '14px', cursor: 'pointer', marginBottom: '12px', fontSize: '0.95rem', transition: 'all 0.3s ease',
-                           background: activeTab === tab ? 'linear-gradient(135deg, #10b981, #059669)' : 'transparent',
-                           boxShadow: activeTab === tab ? '0 10px 15px -3px rgba(16, 185, 129, 0.4)' : 'none'
-                         }}>
-                      {tab}
+              // BUSCA ESTA LÍNEA Y REEMPLÁZALA:
+<div className="dashboard-wrapper" style={{
+  maxWidth: '1150px', 
+  margin: '0 auto', 
+  background: '#fff', 
+  borderRadius: '25px', 
+  display: 'flex', 
+  flexDirection: window.innerWidth < 768 ? 'column' : 'row', // <--- CAMBIO CLAVE
+  minHeight: 'auto', // <--- CAMBIO CLAVE
+  boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)',
+  overflow: 'hidden'
+}}>
+
+  {/* BARRA LATERAL: Cambia width fixed por 100% en móvil */}
+  <div className="dash-sidebar" style={{
+    width: window.innerWidth < 768 ? '100%' : '280px', // <--- CAMBIO CLAVE
+    background: '#0f172a', 
+    padding: '20px', 
+    color: '#f8fafc'
+  }}>
                     </div>
-                ))}
+                
               </div>
 
               {/* CONTENIDO PRINCIPAL DINÁMICO */}
@@ -386,7 +403,7 @@ function App() {
 
       {showDonate && (
         <div className="modal-overlay">
-          <div className="modal-card animate-pop" style={{maxWidth: '450px'}}>
+          <div className="modal-card animate-pop" style={{maxWidth: '400px'}}>
             <button className="btn-close-circle" onClick={() => setShowDonate(false)}>✕</button>
             <h2 style={{marginBottom: '20px'}}>Contribución Segura</h2>
             <div className={`card-visual-wrapper`} style={{perspective: '1000px', marginBottom: '20px', height: '180px'}}>

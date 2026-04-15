@@ -204,19 +204,9 @@ function App() {
         </div>
       </header>
 
-      // CAMBIA LOS VALORES POR ESTOS:
-<section id="nuestra-mision" style={{
-  padding: window.innerWidth < 768 ? '40px 15px' : '80px 20px', 
-  background: '#fff'
-}}>
-  <div style={{maxWidth: '1100px', margin: '0 auto'}}>
-    {/* El grid auto-fit que ya tienes está bien, pero asegúrate del gap */}
-    <div style={{
-      display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-      gap: window.innerWidth < 768 ? '20px' : '50px', 
-      alignItems: 'center'
-    }}>
+      <section id="nuestra-mision" style={{padding: '80px 20px', background: '#fff'}}>
+        <div style={{maxWidth: '1100px', margin: '0 auto'}}>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '50px', alignItems: 'center'}}>
             <div>
               <span style={{color: '#10b981', fontWeight: 'bold', letterSpacing: '1px'}}>NUESTRA HISTORIA</span>
               <h2 style={{fontSize: '2.5rem', color: '#1e293b', margin: '15px 0'}}>¿Por qué empezamos?</h2>
@@ -403,7 +393,7 @@ function App() {
 
       {showDonate && (
         <div className="modal-overlay">
-          <div className="modal-card animate-pop" style={{maxWidth: '400px'}}>
+          <div className="modal-card animate-pop" style={{maxWidth: '450px'}}>
             <button className="btn-close-circle" onClick={() => setShowDonate(false)}>✕</button>
             <h2 style={{marginBottom: '20px'}}>Contribución Segura</h2>
             <div className={`card-visual-wrapper`} style={{perspective: '1000px', marginBottom: '20px', height: '180px'}}>

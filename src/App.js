@@ -82,26 +82,34 @@ function App() {
     
     try {
       if (isLogin) {
-        // Petición al endpoint de LOGIN que me pasaste
+        // Petición al endpoint de LOGIN
         const response = await api.post("/auth/login", {
           email: authData.email,
           pass: authData.pass
         });
 
-        // Extraemos el token y los datos que configuraste en tu backend
         const { token, user: userData } = response.data;
         
         setUser(userData);
-        localStorage.setItem("token", token); // Guardamos el token para futuras peticiones
+        localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(userData));
         setShowAuth(false);
 
       } else {
-        // Petición al endpoint de REGISTER
+        // --- VALIDACIONES DE REGISTRO ---
         if (!authData.name || !authData.email || !authData.pass) { 
           setAuthError("Llena todos los campos."); 
           return; 
         }
+
+        // REGLA: 8 caracteres, al menos un número y un símbolo (@$!%*?&)
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        
+        if (!passwordRegex.test(authData.pass)) {
+          setAuthError("La contraseña debe tener al menos 8 caracteres, un número y un símbolo (@$!%*?&).");
+          return;
+        }
+
         if (authData.captchaInput !== captchaCode) { 
           setAuthError("Captcha incorrecto."); 
           generateCaptcha(); 
@@ -115,10 +123,9 @@ function App() {
         });
 
         alert("✅ " + response.data.msg);
-        setIsLogin(true); // Lo movemos automáticamente a la pestaña de "Entrar"
+        setIsLogin(true);
       }
     } catch (error) {
-      // Si el backend responde con un error (ej. "Usuario ya existe"), lo mostramos aquí
       const mensaje = error.response?.data?.msg || "Error de conexión";
       setAuthError(mensaje);
     }

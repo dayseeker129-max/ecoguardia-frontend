@@ -4,27 +4,34 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
+// ✅ Configuración de CORS para que no te bloquee Vercel
+app.use(cors({
+  origin: "*", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
-// ✅ CONEXIÓN CORRECTA A MONGODB ATLAS
-mongoose.connect("mongodb://axeluniversidad:AXEL2005@ac-j1ok0ko-shard-00-00.1s967ts.mongodb.net:27017,ac-j1ok0ko-shard-00-01.1s967ts.mongodb.net:27017,ac-j1ok0ko-shard-00-02.1s967ts.mongodb.net:27017/ecoguardian?ssl=true&replicaSet=atlas-119onz-shard-0&authSource=admin&retryWrites=true&w=majority")
+// ✅ Conexión a MongoDB (Prioriza la variable de Render)
+const mongoURI = process.env.MONGO_URI || "mongodb+srv://axeluniversidad:AXEL2005@ac-j1ok0ko.1s967ts.mongodb.net/ecoguardian?retryWrites=true&w=majority";
+
+mongoose.connect(mongoURI)
   .then(() => console.log("🔥 MongoDB conectado"))
   .catch(err => console.log("❌ Error Mongo:", err));
 
-// RUTAS
+// ✅ RUTAS AJUSTADAS A TUS ARCHIVOS ACTUALES
+// Usamos los nombres exactos que vi en tu captura de pantalla
 const authRoutes = require("./routes/authroutes");
-const cardRoutes = require("./routes/cardroutes");
+const cardRoutes = require("./routes/cardRouthes"); // Aquí incluí la 'h' y la 'R' de tu archivo
 
 app.use("/api/auth", authRoutes);
 app.use("/api/card", cardRoutes);
 
-// TEST
-app.get("/", (req, res) => {
-  res.send("Servidor funcionando 🚀");
-});
+app.get("/", (req, res) => res.send("Servidor funcionando 🚀"));
 
-// SERVER
-app.listen(5000, () => {
-  console.log("🚀 Puerto 5000");
+// ✅ Puerto dinámico para Render
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Puerto ${PORT}`);
 });

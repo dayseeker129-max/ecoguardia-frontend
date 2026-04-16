@@ -102,11 +102,19 @@ function App() {
           return; 
         }
 
-        // REGLA: 8 caracteres, al menos un número y un símbolo (@$!%*?&)
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        // VALIDACIÓN DE GMAIL
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+        if (!emailRegex.test(authData.email)) {
+          setAuthError("Debes usar una cuenta de @gmail.com válida.");
+          return;
+        }
+
+        // REGLA ACTUALIZADA: 8 caracteres, al menos un número y un símbolo (., @, #, $, !, %, *, ?, &)
+        // Agregamos [.,#@$!%*?&] para que acepte punto, coma y numeral
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[.,#@$!%*?&])[A-Za-z\d.,#@$!%*?&]{8,}$/;
         
         if (!passwordRegex.test(authData.pass)) {
-          setAuthError("La contraseña debe tener al menos 8 caracteres, un número y un símbolo (@$!%*?&).");
+          setAuthError("La contraseña requiere 8 letras, un número y un símbolo (punto, coma, @ o #).");
           return;
         }
 

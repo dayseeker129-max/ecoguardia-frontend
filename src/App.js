@@ -4,7 +4,7 @@ import axios from "axios";
 
 // ✅ CORRECCIÓN: Aquí debes pegar la URL real de tu backend cuando lo subas
 const api = axios.create({
-  baseURL: "http://localhost:5000/api" 
+  baseURL: "https://ecoguardia-backend.onrender.com/api" 
 });
 
 // ESTO ES LO QUE AGREGASTE (El interceptor)

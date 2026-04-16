@@ -82,17 +82,16 @@ function App() {
     
     try {
       if (isLogin) {
-        // Petición al endpoint de LOGIN que me pasaste
+        // Petición al endpoint de LOGIN
         const response = await api.post("/auth/login", {
           email: authData.email,
           pass: authData.pass
         });
 
-        // Extraemos el token y los datos que configuraste en tu backend
         const { token, user: userData } = response.data;
         
         setUser(userData);
-        localStorage.setItem("token", token); // Guardamos el token para futuras peticiones
+        localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(userData));
         setShowAuth(false);
 
@@ -102,6 +101,15 @@ function App() {
           setAuthError("Llena todos los campos."); 
           return; 
         }
+
+        // --- VALIDACIÓN DE CONTRASEÑA AGREGADA ---
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+        if (!passwordRegex.test(authData.pass)) {
+          setAuthError("La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.");
+          return;
+        }
+        // -----------------------------------------
+
         if (authData.captchaInput !== captchaCode) { 
           setAuthError("Captcha incorrecto."); 
           generateCaptcha(); 
@@ -115,10 +123,9 @@ function App() {
         });
 
         alert("✅ " + response.data.msg);
-        setIsLogin(true); // Lo movemos automáticamente a la pestaña de "Entrar"
+        setIsLogin(true);
       }
     } catch (error) {
-      // Si el backend responde con un error (ej. "Usuario ya existe"), lo mostramos aquí
       const mensaje = error.response?.data?.msg || "Error de conexión";
       setAuthError(mensaje);
     }
@@ -138,7 +145,6 @@ function App() {
   };
 
   const handleDonacionExitosa = () => {
-    // 1. Verificar sesión primero
     if (!user) {
         alert("❌ Debes iniciar sesión para realizar una donación.");
         setShowAuth(true);
@@ -147,7 +153,7 @@ function App() {
     }
     
     if (!amount || amount <= 0) { alert("❌ Ingresa un monto válido."); return; }
-    if (!validarTarjetaReal(card.number)) { alert("❌ El número de tarjeta no es válido (Algoritmo de Luhn)."); return; }
+    if (!validarTarjetaReal(card.number)) { alert("❌ El número de tarjeta no es válido."); return; }
     if (!card.date.includes("/") || card.date.length < 5) { alert("❌ Revisa la fecha (MM/YY)."); return; }
     if (card.cvv.length < 3) { alert("❌ El CVV debe tener 3 dígitos."); return; }
 
@@ -325,8 +331,6 @@ function App() {
 
           return (
             <div className="dashboard-wrapper" style={{maxWidth: '1150px', margin: '0 auto', background: '#fff', borderRadius: '25px', display: 'flex', minHeight: '550px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'}}>
-              
-              {/* BARRA LATERAL */}
               <div className="dash-sidebar" style={{width: '280px', background: '#0f172a', padding: '40px 20px', color: '#f8fafc', borderTopLeftRadius: '25px', borderBottomLeftRadius: '25px'}}>
                 <div style={{marginBottom: '35px', paddingLeft: '10px'}}>
                   <span style={{color: '#10b981', fontSize: '0.75rem', fontWeight: 'bold', letterSpacing: '2px'}}>ECO-ACADEMIA</span>
@@ -344,7 +348,6 @@ function App() {
                 ))}
               </div>
 
-              {/* CONTENIDO PRINCIPAL DINÁMICO */}
               <div className="dash-main-content" style={{flex: '1', padding: '60px'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '50px'}}>
                   <div>
@@ -429,7 +432,7 @@ function App() {
                 <input type="password" placeholder="Contraseña" className="input-field" onChange={(e)=>setAuthData({...authData, pass: e.target.value})} />
                 {!isLogin && (
                   <>
-                    <p style={{fontSize: '0.7rem', color: 'gray'}}>Mínimo 8 caracteres, 1 mayúscula y 1 número.</p>
+                    <p style={{fontSize: '0.7rem', color: 'gray'}}>Mínimo 8 caracteres, una mayúscula y un número.</p>
                     <div style={{display: 'flex', gap: '10px'}}><div style={{background: '#eee', padding: '10px', fontWeight: 'bold'}}>{captchaCode}</div><input placeholder="Captcha" className="input-field" onChange={(e)=>setAuthData({...authData, captchaInput: e.target.value})} /></div>
                   </>
                 )}

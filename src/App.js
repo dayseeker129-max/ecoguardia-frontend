@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 
-// Esto crea un acceso directo a tu servidor
+// ✅ CORRECCIÓN: Aquí debes pegar la URL real de tu backend cuando lo subas
 const api = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: "http://localhost:5000/api" 
 });
 
 // ESTO ES LO QUE AGREGASTE (El interceptor)
@@ -19,11 +19,10 @@ api.interceptors.request.use((config) => {
 function App() {
   const [user, setUser] = useState(null);
   const [selectedImpact, setSelectedImpact] = useState(null);
-  // ... el resto de tus estados siguen aquí abajo
   const [showDonate, setShowDonate] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const [activeTab, setActiveTab] = useState("Mi Impacto Social"); // Actualizado para coincidir con el nuevo nombre
+  const [activeTab, setActiveTab] = useState("Mi Impacto Social"); 
   const [isPendingImpact, setIsPendingImpact] = useState(false);
 
   const [flipCard, setFlipCard] = useState(false);
@@ -79,49 +78,37 @@ function App() {
 
   const handleAuthAction = async () => {
     setAuthError("");
-    
     try {
       if (isLogin) {
-        // Petición al endpoint de LOGIN
         const response = await api.post("/auth/login", {
           email: authData.email,
           pass: authData.pass
         });
-
         const { token, user: userData } = response.data;
-        
         setUser(userData);
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(userData));
         setShowAuth(false);
-
       } else {
-        // Petición al endpoint de REGISTER
         if (!authData.name || !authData.email || !authData.pass) { 
           setAuthError("Llena todos los campos."); 
           return; 
         }
-
-        // --- VALIDACIÓN DE CONTRASEÑA AGREGADA ---
         const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
         if (!passwordRegex.test(authData.pass)) {
           setAuthError("La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.");
           return;
         }
-        // -----------------------------------------
-
         if (authData.captchaInput !== captchaCode) { 
           setAuthError("Captcha incorrecto."); 
           generateCaptcha(); 
           return; 
         }
-
         const response = await api.post("/auth/register", {
           name: authData.name,
           email: authData.email,
           pass: authData.pass
         });
-
         alert("✅ " + response.data.msg);
         setIsLogin(true);
       }
@@ -151,7 +138,6 @@ function App() {
         setShowDonate(false);
         return;
     }
-    
     if (!amount || amount <= 0) { alert("❌ Ingresa un monto válido."); return; }
     if (!validarTarjetaReal(card.number)) { alert("❌ El número de tarjeta no es válido."); return; }
     if (!card.date.includes("/") || card.date.length < 5) { alert("❌ Revisa la fecha (MM/YY)."); return; }
@@ -261,7 +247,6 @@ function App() {
           <div className="detail-view-container" style={{padding: '20px'}}>
             <button className="btn-back-soft" onClick={() => setSelectedImpact(null)}>← Regresar</button>
             <h2 style={{textAlign: 'center', marginTop: '10px'}}>{projects[selectedImpact].titulo}</h2>
-            
             <div className="chart-card" style={{background: 'white', padding: '20px', borderRadius: '15px', margin: '20px 0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)'}}>
                 <h3>Histórico de Impacto</h3>
                 <div className="visual-chart-placeholder" style={{display: 'flex', alignItems: 'flex-end', gap: '10px', height: '100px', marginTop: '10px'}}>
@@ -326,9 +311,7 @@ function App() {
               footer: "🎁 ¡Canjea 500 puntos más por un kit de herramientas de reforestación!"
             }
           };
-
           const current = tabData[activeTab] || tabData["Cursos Completados"];
-
           return (
             <div className="dashboard-wrapper" style={{maxWidth: '1150px', margin: '0 auto', background: '#fff', borderRadius: '25px', display: 'flex', minHeight: '550px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'}}>
               <div className="dash-sidebar" style={{width: '280px', background: '#0f172a', padding: '40px 20px', color: '#f8fafc', borderTopLeftRadius: '25px', borderBottomLeftRadius: '25px'}}>
@@ -347,7 +330,6 @@ function App() {
                     </div>
                 ))}
               </div>
-
               <div className="dash-main-content" style={{flex: '1', padding: '60px'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '50px'}}>
                   <div>
@@ -356,7 +338,6 @@ function App() {
                   </div>
                   <img src={current.foto} alt="Contexto" style={{width: '75px', height: '75px', borderRadius: '18px', objectFit: 'cover', transform: 'rotate(-3deg)', border: '4px solid #fff', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}} />
                 </div>
-                
                 <div className="metrics-row" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '25px'}}>
                     <div className="metric-card" style={{padding: '25px', background: '#fff', borderRadius: '20px', border: '1px solid #f1f5f9'}}>
                       <span style={{fontSize: '1.5rem'}}>{current.metrica1.icon}</span>
@@ -374,12 +355,11 @@ function App() {
                       <div style={{fontSize: '1.7rem', fontWeight: 'bold', color: '#6366f1', marginTop: '5px'}}>{current.metrica3.val}</div>
                     </div>
                 </div>
-
                 <div style={{marginTop: '45px', padding: '30px', background: 'linear-gradient(to right, #f8fafc, #eff6ff)', borderRadius: '20px'}}>
-                   <h4 style={{color: '#1e293b'}}>{current.footer}</h4>
-                   <div style={{width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '20px', marginTop: '20px'}}>
-                      <div style={{width: activeTab === "Cursos Completados" ? "80%" : activeTab === "Próximas Expediciones" ? "40%" : "65%", height: '100%', background: '#10b981', borderRadius: '20px'}}></div>
-                   </div>
+                    <h4 style={{color: '#1e293b'}}>{current.footer}</h4>
+                    <div style={{width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '20px', marginTop: '20px'}}>
+                       <div style={{width: activeTab === "Cursos Completados" ? "80%" : activeTab === "Próximas Expediciones" ? "40%" : "65%", height: '100%', background: '#10b981', borderRadius: '20px'}}></div>
+                    </div>
                 </div>
               </div>
             </div>

@@ -102,14 +102,6 @@ function App() {
           setAuthError("Llena todos los campos."); 
           return; 
         }
-
-        // VALIDACIÓN DE CONTRASEÑA (8 caracteres, 1 mayúscula, 1 número, 1 especial)
-        const strongPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-        if (!strongPassword.test(authData.pass)) {
-          setAuthError("La contraseña debe tener mínimo 8 caracteres, una mayúscula, un número y un carácter especial.");
-          return;
-        }
-
         if (authData.captchaInput !== captchaCode) { 
           setAuthError("Captcha incorrecto."); 
           generateCaptcha(); 
@@ -437,7 +429,7 @@ function App() {
                 <input type="password" placeholder="Contraseña" className="input-field" onChange={(e)=>setAuthData({...authData, pass: e.target.value})} />
                 {!isLogin && (
                   <>
-                    <p style={{fontSize: '0.7rem', color: 'gray'}}>Mínimo 8 caracteres, 1 mayúscula, 1 número y 1 símbolo.</p>
+                    <p style={{fontSize: '0.7rem', color: 'gray'}}>Mínimo 8 caracteres, 1 mayúscula y 1 número.</p>
                     <div style={{display: 'flex', gap: '10px'}}><div style={{background: '#eee', padding: '10px', fontWeight: 'bold'}}>{captchaCode}</div><input placeholder="Captcha" className="input-field" onChange={(e)=>setAuthData({...authData, captchaInput: e.target.value})} /></div>
                   </>
                 )}
